@@ -1,10 +1,18 @@
 # Ziglings
+# ⚠️ Ziglings has moved from GitHub to Codeberg!
+
+You are looking at the current Ziglings repo if you are viewing
+this at https://codeberg.org/ziglings/exercises/
+
+You can also use the handy URL https://ziglings.org to get here!
+
+***
 
 Welcome to Ziglings! This project contains a series of tiny
 broken programs (and one nasty surprise).  By fixing them, you'll
 learn how to read and write [Zig](https://ziglang.org/) code.
 
-![ziglings](https://user-images.githubusercontent.com/1458409/109398392-c1069500-790a-11eb-8ed4-7d7d74d32666.jpg)
+![Ziglings](images/ziglings.jpg "Ziglings")
 
 Those broken programs need your help! (You'll also save the
 planet from evil aliens and help some friendly elephants stick
@@ -31,6 +39,7 @@ for more detail:
 * https://ziglang.org/learn/
 * https://ziglearn.org/
 * https://ziglang.org/documentation/master/
+* [Zig in Depth! (video series)](https://www.youtube.com/watch?v=MMtvGA1YhW4&list=PLtB7CL7EG7pCw7Xy1SQC53Gl8pI7aDg9t&pp=iAQB)
 
 Also, the [Zig community](https://github.com/ziglang/zig/wiki/Community)
 is incredibly friendly and helpful!
@@ -45,14 +54,14 @@ Verify the installation and build number of `zig` like so:
 
 ```
 $ zig version
-0.11.0-dev.3295+xxxxxxxxx
+0.12.0-dev.xxxx+xxxxxxxxx
 ```
 
 Clone this repository with Git:
 
 ```
-$ git clone https://github.com/ratfactor/ziglings
-$ cd ziglings
+$ git clone https://ziglings.org
+$ cd ziglings.org
 ```
 
 Then run `zig build` and follow the instructions to begin!
@@ -67,20 +76,18 @@ reading these.
 
 ## A Note About Versions
 
+**Hint:** To check out Ziglings for a stable release of Zig, you can use
+the appropriate tag. 
+
 The Zig language is under very active development. In order to be
 current, Ziglings tracks **development** builds of the Zig
 compiler rather than versioned **release** builds. The last
-stable release was `0.10.1`, but Ziglings needs a dev build with
-pre-release version "0.11.0" and a build number at least as high
+stable release was `0.11.0`, but Ziglings needs a dev build with
+pre-release version "0.12.0" and a build number at least as high
 as that shown in the example version check above.
 
 It is likely that you'll download a build which is _greater_ than
 the minimum.
-
-_(For those who cannot easily update Zig, there are also
-community-supported branches in this repo. At the moment, there's
-one for v0.8.1. Older version branches may or may not have all
-exercises and/or bugfixes.)_
 
 Once you have a build of the Zig compiler that works with
 Ziglings, they'll continue to work together. But keep in mind
@@ -89,7 +96,11 @@ that if you update one, you may need to also update the other.
 
 ### Version Changes
 
-Version-0.11.0-dev.3295+7cb2e653a
+Version-0.12.0-dev.1243
+* *2023-10-24* zig 0.12.0-dev.1243 - changes in `std.ChildProcess`: renamed exec to run - see[#5853](https://github.com/ziglang/zig/issues/5853)
+* *2023-06-26* zig 0.11.0-dev.4246 - changes in compile step (now it can be null)
+* *2023-06-26* zig 0.11.0-dev.3853 - removal of destination type from all cast builtins
+* *2023-06-20* zig 0.11.0-dev.3747 - `@enumToInt` is now `@intFromEnum` and `@intToFloat` is now `@floatFromInt`
 * *2023-05-25* zig 0.11.0-dev.3295 - `std.debug.TTY` is now `std.io.tty`
 * *2023-04-30* zig 0.11.0-dev.2704 - use of the new `std.Build.ExecutableOptions.link_libc` field
 * *2023-04-12* zig 0.11.0-dev.2560 - changes in `std.Build` - remove run() and install()
@@ -111,12 +122,10 @@ Version-0.11.0-dev.3295+7cb2e653a
 
 ## Advanced Usage
 
-It can be handy to check just a single exercise or _start_ from a
-single exercise:
+It can be handy to check just a single exercise:
 
 ```
 zig build -Dn=19
-zig build -Dn=19 start
 ```
 
 You can also run without checking for correctness:
@@ -205,12 +214,13 @@ Zig Core Language
 * [X] Interfaces
 * [X] Bit manipulation
 * [X] Working with C
+* [ ] Interfaces part 2
 
 Zig Standard Library
 
 * [X] String formatting
 * [X] Testing
-* [ ] Tokenization
+* [X] Tokenization
 
 ## Contributing
 
@@ -222,5 +232,5 @@ tons of room for improvement:
 * Idiomatic usage of Zig
 * Additional exercises
 
-Please see [CONTRIBUTING](https://github.com/ratfactor/ziglings/blob/main/CONTRIBUTING.md)
+Please see [CONTRIBUTING](https://codeberg.org/ziglings/exercises/src/branch/main/CONTRIBUTING.md)
 in this repo for the full details.

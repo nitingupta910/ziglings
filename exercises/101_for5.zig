@@ -35,8 +35,8 @@
 const std = @import("std");
 const print = std.debug.print;
 
-// This is the same character class enum we've seen before.
-const Class = enum {
+// This is the same character role enum we've seen before.
+const Role = enum {
     wizard,
     thief,
     bard,
@@ -45,14 +45,14 @@ const Class = enum {
 
 pub fn main() void {
     // Here are the three "property" arrays:
-    const classes = [4]Class{ .wizard, .bard, .bard, .warrior };
+    const roles = [4]Role{ .wizard, .bard, .bard, .warrior };
     const gold = [4]u16{ 25, 11, 5, 7392 };
     const experience = [4]u8{ 40, 17, 55, 21 };
 
     // We would like to number our list starting with 1, not 0.
     // How do we do that?
-    for (classes, gold, experience, 1..) |c, g, e, i| {
-        const class_name = switch (c) {
+    for (roles, gold, experience, ???) |c, g, e, i| {
+        const role_name = switch (c) {
             .wizard => "Wizard",
             .thief => "Thief",
             .bard => "Bard",
@@ -61,7 +61,7 @@ pub fn main() void {
 
         std.debug.print("{d}. {s} (Gold: {d}, XP: {d})\n", .{
             i,
-            class_name,
+            role_name,
             g,
             e,
         });
@@ -84,7 +84,7 @@ pub fn main() void {
 // use a marble scoop, spoon magnet, and feather tongs to grab
 // each type of object.
 //
-// Now, would you rather the magic bag:
+// Now, would you rather use the magic bag:
 //
 // A. Grouped the items in clusters so you have to pick up one
 //    marble, then one spoon, then one feather?
@@ -95,7 +95,7 @@ pub fn main() void {
 //    marbles at once, then all the spoons, then all of the
 //    feathers?
 //
-// If this metaphor is working, hopefully it's clear that the 'B'
+// If this metaphor is working, hopefully, it's clear that the 'B'
 // option would be much more efficient.
 //
 // Well, it probably comes as little surprise that storing and
@@ -119,4 +119,8 @@ pub fn main() void {
 // types (AoS) versus a single RPG character struct containing
 // three arrays of one data type each, like those in the exercise
 // above (SoA).
+//
+// For a more practical application of "data-oriented design"
+// watch the following talk from Andrew Kelley, the creator of Zig:
+// https://vimeo.com/649009599
 //

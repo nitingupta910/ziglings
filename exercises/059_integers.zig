@@ -6,7 +6,8 @@
 //     const a2: u8 = 0x41;      // hexadecimal
 //     const a3: u8 = 0o101;     // octal
 //     const a4: u8 = 0b1000001; // binary
-//     const a5: u8 = 'A';       // UTF-8 code point literal
+//     const a5: u8 = 'A';       // ASCII code point literal
+//     const a6: u16 = 'Ȁ';      // Unicode code points can take up to 21 bits
 //
 // You can also place underscores in numbers to aid readability:
 //
@@ -18,10 +19,10 @@
 const print = @import("std").debug.print;
 
 pub fn main() void {
-    var zig = [_]u8{
-        0o131 + 1, // octal
-        0b1101000 + 1, // binary
-        0x66 + 1, // hex
+    const zig = [_]u8{
+        0o131, // octal
+        0b1101000, // binary
+        0x66, // hex
     };
 
     print("{s} is cool.\n", .{zig});

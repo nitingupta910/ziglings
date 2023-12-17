@@ -23,7 +23,7 @@
 // the simulation expanded to hundreds of different insects.
 //
 // Thankfully, Zig has another comptime feature we can use
-// to get out of this dilema called the 'inline else'.
+// to get out of this dilemma called the 'inline else'.
 //
 // We can replace this redundant code:
 //
@@ -96,7 +96,7 @@ const Insect = union(enum) {
 };
 
 pub fn main() !void {
-    var my_insects = [_]Insect{
+    const my_insects = [_]Insect{
         Insect{ .ant = Ant{ .still_alive = true } },
         Insect{ .bee = Bee{ .flowers_visited = 17 } },
         Insect{ .grasshopper = Grasshopper{ .distance_hopped = 32 } },
@@ -106,7 +106,7 @@ pub fn main() !void {
     for (my_insects) |insect| {
         // Almost done! We want to print() each insect with a
         // single method call here.
-        insect.print();
+        ???
     }
 }
 

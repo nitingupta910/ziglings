@@ -1,16 +1,42 @@
 const std = @import("std");
 const builtin = @import("builtin");
-const compat = @import("src/compat.zig");
 const tests = @import("test/tests.zig");
 
-const Build = compat.Build;
-const CompileStep = compat.build.CompileStep;
-const Step = compat.build.Step;
+const Build = std.Build;
+const CompileStep = Build.CompileStep;
+const Step = Build.Step;
 const Child = std.process.Child;
 
 const assert = std.debug.assert;
 const join = std.fs.path.join;
 const print = std.debug.print;
+
+// When changing this version, be sure to also update README.md in two places:
+//     1) Getting Started
+//     2) Version Changes
+comptime {
+    const required_zig = "0.12.0-dev.1243";
+    const current_zig = builtin.zig_version;
+    const min_zig = std.SemanticVersion.parse(required_zig) catch unreachable;
+    if (current_zig.order(min_zig) == .lt) {
+        const error_message =
+            \\Sorry, it looks like your version of zig is too old. :-(
+            \\
+            \\Ziglings requires development build
+            \\
+            \\{}
+            \\
+            \\or higher.
+            \\
+            \\Please download a development ("master") build from
+            \\
+            \\https://ziglang.org/download/
+            \\
+            \\
+        ;
+        @compileError(std.fmt.comptimePrint(error_message, .{min_zig}));
+    }
+}
 
 const Kind = enum {
     /// Run the artifact as a normal executable.
@@ -93,7 +119,6 @@ pub const logo =
 ;
 
 pub fn build(b: *Build) !void {
-    if (!compat.is_compatible) compat.die();
     if (!validate_exercises()) std.os.exit(2);
 
     use_color_escapes = false;
@@ -104,7 +129,7 @@ pub fn build(b: *Build) !void {
             const WINAPI = std.os.windows.WINAPI;
             const DWORD = std.os.windows.DWORD;
             const ENABLE_VIRTUAL_TERMINAL_PROCESSING = 0x0004;
-            const STD_ERROR_HANDLE = @bitCast(DWORD, @as(i32, -12));
+            const STD_ERROR_HANDLE: DWORD = @bitCast(@as(i32, -12));
             extern "kernel32" fn GetStdHandle(id: DWORD) callconv(WINAPI) ?*anyopaque;
             extern "kernel32" fn GetConsoleMode(console: ?*anyopaque, out_mode: *DWORD) callconv(WINAPI) u32;
             extern "kernel32" fn SetConsoleMode(console: ?*anyopaque, mode: DWORD) callconv(WINAPI) u32;
@@ -240,7 +265,7 @@ const ZiglingStep = struct {
             std.os.exit(2);
         };
 
-        self.run(exe_path, prog_node) catch {
+        self.run(exe_path.?, prog_node) catch {
             self.printErrors();
 
             if (self.exercise.hint) |hint|
@@ -256,14 +281,14 @@ const ZiglingStep = struct {
 
     fn run(self: *ZiglingStep, exe_path: []const u8, _: *std.Progress.Node) !void {
         resetLine();
-        print("Checking {s}...\n", .{self.exercise.main_file});
+        print("Checking: {s}\n", .{self.exercise.main_file});
 
         const b = self.step.owner;
 
         // Allow up to 1 MB of stdout capture.
         const max_output_bytes = 1 * 1024 * 1024;
 
-        var result = Child.exec(.{
+        const result = Child.run(.{
             .allocator = b.allocator,
             .argv = &.{exe_path},
             .cwd = b.build_root.path.?,
@@ -281,7 +306,7 @@ const ZiglingStep = struct {
         }
     }
 
-    fn check_output(self: *ZiglingStep, result: Child.ExecResult) !void {
+    fn check_output(self: *ZiglingStep, result: Child.RunResult) !void {
         const b = self.step.owner;
 
         // Make sure it exited cleanly.
@@ -330,7 +355,7 @@ const ZiglingStep = struct {
         print("{s}PASSED:\n{s}{s}\n\n", .{ green_text, output, reset_text });
     }
 
-    fn check_test(self: *ZiglingStep, result: Child.ExecResult) !void {
+    fn check_test(self: *ZiglingStep, result: Child.RunResult) !void {
         switch (result.term) {
             .Exited => |code| {
                 if (code != 0) {
@@ -350,8 +375,8 @@ const ZiglingStep = struct {
         print("{s}PASSED{s}\n\n", .{ green_text, reset_text });
     }
 
-    fn compile(self: *ZiglingStep, prog_node: *std.Progress.Node) ![]const u8 {
-        print("Compiling {s}...\n", .{self.exercise.main_file});
+    fn compile(self: *ZiglingStep, prog_node: *std.Progress.Node) !?[]const u8 {
+        print("Compiling: {s}\n", .{self.exercise.main_file});
 
         const b = self.step.owner;
         const exercise_path = self.exercise.main_file;
@@ -814,7 +839,7 @@ const exercises = [_]Exercise{
     },
     .{
         .main_file = "060_floats.zig",
-        .output = "Shuttle liftoff weight: 1995796kg",
+        .output = "Shuttle liftoff weight: 2032092kg",
     },
     .{
         .main_file = "061_coercions.zig",
@@ -1056,6 +1081,27 @@ const exercises = [_]Exercise{
         .main_file = "102_testing.zig",
         .output = "",
         .kind = .@"test",
+    },
+    .{
+        .main_file = "103_tokenization.zig",
+        .output =
+        \\My
+        \\name
+        \\is
+        \\Ozymandias
+        \\King
+        \\of
+        \\Kings
+        \\Look
+        \\on
+        \\my
+        \\Works
+        \\ye
+        \\Mighty
+        \\and
+        \\despair
+        \\This little poem has 15 words!
+        ,
     },
     .{
         .main_file = "999_the_end.zig",

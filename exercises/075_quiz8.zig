@@ -114,7 +114,7 @@ const HermitsNotebook = struct {
     }
 
     fn checkNote(self: *HermitsNotebook, note: NotebookEntry) void {
-        var existing_entry = self.getEntry(note.place);
+        const existing_entry = self.getEntry(note.place);
 
         if (existing_entry == null) {
             self.entries[self.end_of_entries] = note;
@@ -184,7 +184,7 @@ pub fn main() void {
     notebook.checkNote(working_note);
 
     while (notebook.hasNextEntry()) {
-        var place_entry = notebook.getNextEntry();
+        const place_entry = notebook.getNextEntry();
 
         for (place_entry.place.paths) |*path| {
             working_note = NotebookEntry{
@@ -208,7 +208,7 @@ pub fn main() void {
 }
 
 fn printTrip(trip: []?TripItem) void {
-    var i: u8 = @intCast(u8, trip.len);
+    var i: u8 = @intCast(trip.len);
 
     while (i > 0) {
         i -= 1;

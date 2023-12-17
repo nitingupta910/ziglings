@@ -30,7 +30,7 @@
 //         std.debug.print("slice_ptr={*}\n", .{slice_ptr});
 //     }
 
-// Instead of an simple integer or a constant sized slice, this
+// Instead of a simple integer or a constant sized slice, this
 // program requires a slice to be allocated that is the same size as
 // an input array.
 
@@ -45,13 +45,14 @@ fn runningAverage(arr: []const f64, avg: []f64) void {
 
     for (0.., arr) |index, val| {
         sum += val;
-        avg[index] = sum / @intToFloat(f64, index + 1);
+        const f_index: f64 = @floatFromInt(index + 1);
+        avg[index] = sum / f_index;
     }
 }
 
 pub fn main() !void {
     // pretend this was defined by reading in user input
-    var arr: []const f64 = &[_]f64{ 0.3, 0.2, 0.1, 0.1, 0.4 };
+    const arr: []const f64 = &[_]f64{ 0.3, 0.2, 0.1, 0.1, 0.4 };
 
     // initialize the allocator
     var arena = std.heap.ArenaAllocator.init(std.heap.page_allocator);
@@ -63,7 +64,7 @@ pub fn main() !void {
     const allocator = arena.allocator();
 
     // allocate memory for this array
-    var avg: []f64 = try allocator.alloc(f64, arr.len);
+    const avg: []f64 = ???;
 
     runningAverage(arr, avg);
     std.debug.print("Running Average: ", .{});

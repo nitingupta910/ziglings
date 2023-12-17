@@ -4,7 +4,7 @@
 // Ziglings exercise.
 //
 // We've also seen @intCast() in "016_for2.zig", "058_quiz7.zig";
-// and @enumToInt() in "036_enums2.zig".
+// and @intFromEnum() in "036_enums2.zig".
 //
 // Builtins are special because they are intrinsic to the Zig
 // language itself (as opposed to being provided in the standard
@@ -13,7 +13,7 @@
 // compiler, such as type introspection (the ability to examine
 // type properties from within a program).
 //
-// Zig currently contains 101 builtin functions. We're certainly
+// Zig contains over 100 builtin functions. We're certainly
 // not going to cover them all, but we can look at some
 // interesting ones.
 //
@@ -28,8 +28,7 @@ const print = @import("std").debug.print;
 pub fn main() void {
     // The second builtin, alphabetically, is:
     //   @addWithOverflow(a: anytype, b: anytype) struct { @TypeOf(a, b), u1 }
-    //     * 'T' will be the type of the other parameters.
-    //     * 'a' and 'b' are numbers of the type T.
+    //     * 'a' and 'b' are numbers of anytype.
     //     * The return value is a tuple with the result and a possible overflow bit.
     //
     // Let's try it with a tiny 4-bit integer size to make it clear:
@@ -59,7 +58,7 @@ pub fn main() void {
     // There is a difference between
     //  - a value, that overflowed at some point and is now corrupted
     //  - a single operation that overflows and maybe causes subsequent errors
-    // In practise we usually notice the overflowed value first and have to work
+    // In practice we usually notice the overflowed value first and have to work
     // our way backwards to the operation that caused the overflow.
     //
     // If there was no overflow at all while adding 5 to a, what value would
